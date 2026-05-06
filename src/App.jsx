@@ -1,15 +1,9 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Area,
-  AreaChart,
   Bar,
   BarChart,
   CartesianGrid,
-  Cell,
-  ComposedChart,
-  LabelList,
-  Line,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -20,187 +14,435 @@ import {
   ArrowRight,
   BadgeCheck,
   Binary,
-  BookOpen,
   BriefcaseBusiness,
-  Building2,
   CheckCircle2,
-  ChevronRight,
-  CircleDot,
   Database,
-  Euro,
-  ExternalLink,
   FileText,
   Flag,
   Globe2,
-  GraduationCap,
-  Landmark,
-  Languages,
   Layers3,
-  Library,
-  MapPin,
   MonitorSmartphone,
   Network,
   ShieldCheck,
   Sparkles,
-  UsersRound,
   X,
 } from "lucide-react";
 
 const officialImages = {
   classroom:
-    "https://scaling.spaggiari.eu/FIII0023/testo/5051.png%26rs%3D%2FtccTw2MgxYfdxRYmYOB6Pk9jQH5POS%2FquVc8aOi3ns2htM1BhF%2Fr5nAtRVDWvfTyMAZSK1CdbWaDHnglQjglAuFwI5cB%2FVmg%2FuX4At01ifvHVhzR520%2FYme%2BqShUDP%2B9Qj7hNmcQs3PUZ%2B9YD5vdA%3D%3D",
+    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=80",
   lab:
-    "https://scaling.spaggiari.eu/FIII0023/testo/5059.png%26rs%3D%2FtccTw2MgxYfdxRYmYOB6Pk9jQH5POS%2FquVc8aOi3ns2htM1BhF%2Fr5nAtRVDWvfTyMAZSK1CdbWaDHnglQjglAuFwI5cB%2FVmg%2FuX4At01ifvHVhzR520%2FYme%2BqShUDP%2B9YD5vdA%3D%3D",
+    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80",
   languageLab:
-    "https://scaling.spaggiari.eu/FIII0023/testo/5057.png%26rs%3D%2FtccTw2MgxYfdxRYmYOB6Pk9jQH5POS%2FquVc8aOi3ns2htM1BhF%2Fr5nAtRVDWvfTyMAZSK1CdbWaDHnglQjglAuFwI5cB%2FVmg%2FuX4At01ifvHVhzR520%2FYme%2BqShUDP%2B9YD5vdA%3D%3D",
+    "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1400&q=80",
   library:
-    "https://scaling.spaggiari.eu/FIII0023/testo/5055.png%26rs%3D%2FtccTw2MgxYfdxRYmYOB6Pk9jQH5POS%2FquVc8aOi3ns2htM1BhF%2Fr5nAtRVDWvfTyMAZSK1CdbWaDHnglQjglAuFwI5cB%2FVmg%2FuX4At01ifvHVhzR520%2FYme%2BqShUDP%2B9YD5vdA%3D%3D",
+    "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1400&q=80",
+};
+
+const svgImage = (svg) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+
+const flowchartImage = svgImage(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#07111f"/>
+      <stop offset="1" stop-color="#0f2f4f"/>
+    </linearGradient>
+    <linearGradient id="node" x1="0" x2="1">
+      <stop offset="0" stop-color="#67e8f9"/>
+      <stop offset="1" stop-color="#a5b4fc"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <g opacity=".18" stroke="#ffffff" stroke-width="1">
+    <path d="M0 100h1200M0 200h1200M0 300h1200M0 400h1200M0 500h1200M0 600h1200M0 700h1200"/>
+    <path d="M100 0v800M200 0v800M300 0v800M400 0v800M500 0v800M600 0v800M700 0v800M800 0v800M900 0v800M1000 0v800M1100 0v800"/>
+  </g>
+  <g font-family="Inter, Arial, sans-serif" text-anchor="middle" filter="url(#glow)">
+    <rect x="455" y="75" width="290" height="82" rx="41" fill="none" stroke="url(#node)" stroke-width="8"/>
+    <text x="600" y="126" fill="#e0faff" font-size="34" font-weight="700">START</text>
+    <path d="M600 157v70" stroke="#93c5fd" stroke-width="8" marker-end="url(#a)"/>
+    <rect x="420" y="230" width="360" height="95" rx="18" fill="#0b2440" stroke="#67e8f9" stroke-width="7"/>
+    <text x="600" y="288" fill="#e0faff" font-size="30" font-weight="700">Read input data</text>
+    <path d="M600 325v72" stroke="#93c5fd" stroke-width="8"/>
+    <path d="M600 397l170 105-170 105-170-105z" fill="#102b4c" stroke="#a5b4fc" stroke-width="7"/>
+    <text x="600" y="493" fill="#f8fafc" font-size="27" font-weight="700">Condition?</text>
+    <text x="600" y="530" fill="#bae6fd" font-size="22">yes / no</text>
+    <path d="M430 502H275v92" stroke="#67e8f9" stroke-width="8"/>
+    <path d="M770 502h155v92" stroke="#67e8f9" stroke-width="8"/>
+    <rect x="150" y="595" width="250" height="85" rx="16" fill="#0b2440" stroke="#67e8f9" stroke-width="7"/>
+    <text x="275" y="648" fill="#e0faff" font-size="28" font-weight="700">Loop block</text>
+    <rect x="800" y="595" width="250" height="85" rx="16" fill="#0b2440" stroke="#a5b4fc" stroke-width="7"/>
+    <text x="925" y="648" fill="#e0faff" font-size="28" font-weight="700">Output</text>
+  </g>
+</svg>`);
+
+const escapeSvgText = (value) =>
+  String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+
+const softwareScreenImage = ({ title, subtitle, color = "#67e8f9", panels = [], code = [] }) => svgImage(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#07111f"/>
+      <stop offset="1" stop-color="#172554"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <rect x="95" y="70" width="1010" height="660" rx="28" fill="#0f172a" stroke="#334155" stroke-width="4"/>
+  <rect x="95" y="70" width="1010" height="74" rx="28" fill="#111827"/>
+  <circle cx="145" cy="107" r="13" fill="#f87171"/>
+  <circle cx="186" cy="107" r="13" fill="#facc15"/>
+  <circle cx="227" cy="107" r="13" fill="#34d399"/>
+  <text x="285" y="116" fill="${color}" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="800">${escapeSvgText(title)}</text>
+  <text x="145" y="190" fill="#e5faff" font-family="Inter, Arial, sans-serif" font-size="40" font-weight="800">${escapeSvgText(subtitle)}</text>
+  ${panels.map((panel, index) => {
+    const x = 145 + (index % 2) * 465;
+    const y = 235 + Math.floor(index / 2) * 155;
+    return `<rect x="${x}" y="${y}" width="420" height="116" rx="18" fill="#1e293b" stroke="${color}" stroke-opacity=".45" stroke-width="3"/>
+      <text x="${x + 26}" y="${y + 48}" fill="#f8fafc" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800">${escapeSvgText(panel[0])}</text>
+      <text x="${x + 26}" y="${y + 84}" fill="#bae6fd" font-family="Inter, Arial, sans-serif" font-size="21">${escapeSvgText(panel[1])}</text>`;
+  }).join("")}
+  ${code.map((line, index) => {
+    const y = 275 + index * 48;
+    return `<text x="155" y="${y}" fill="${index % 2 === 0 ? "#e2e8f0" : color}" font-family="Consolas, monospace" font-size="30">${escapeSvgText(line)}</text>`;
+  }).join("")}
+</svg>`);
+
+const screenBank = {
+  word: softwareScreenImage({
+    title: "Word processor",
+    subtitle: "Structured document",
+    color: "#60a5fa",
+    panels: [["Styles", "headings · sections"], ["Tables", "data in documents"], ["Images", "layout and captions"], ["Export", "shared final file"]],
+  }),
+  slides: softwareScreenImage({
+    title: "Presentation software",
+    subtitle: "Clear technical slides",
+    color: "#fb923c",
+    panels: [["Slide master", "consistent layout"], ["Charts", "visual evidence"], ["Speaker notes", "oral explanation"], ["Export", "present and share"]],
+  }),
+  spreadsheet: softwareScreenImage({
+    title: "Spreadsheet",
+    subtitle: "Rows, columns and formulas",
+    color: "#34d399",
+    panels: [["A1:D12", "structured table"], ["=SUM(B2:B12)", "basic formulas"], ["Charts", "readable results"], ["Filters", "data exploration"]],
+  }),
+  files: softwareScreenImage({
+    title: "Digital workspace",
+    subtitle: "Folders, versions and sharing",
+    color: "#a78bfa",
+    panels: [["Naming", "clear file structure"], ["Cloud", "shared documents"], ["Formats", "docx · xlsx · pdf"], ["Workflow", "draft · review · final"]],
+  }),
+  excelFunctions: softwareScreenImage({
+    title: "Advanced spreadsheet",
+    subtitle: "Functions and logical tests",
+    color: "#22c55e",
+    code: ["=IF(C2>=60,\"PASS\",\"REVIEW\")", "=XLOOKUP(A2,Clients[ID],Clients[Name])", "=SUMIFS(Sales[Total],Sales[Area],F2)", "=ROUND(AVERAGE(B2:B20),2)"],
+  }),
+  excelTables: softwareScreenImage({
+    title: "Data table",
+    subtitle: "Sort, filter, summarize",
+    color: "#14b8a6",
+    panels: [["Filters", "select rows"], ["Pivot view", "group values"], ["Conditional format", "highlight patterns"], ["Chart", "show the trend"]],
+  }),
+  customFunctions: softwareScreenImage({
+    title: "Custom spreadsheet logic",
+    subtitle: "Reusable calculations",
+    color: "#84cc16",
+    code: ["function margin(revenue, cost) {", "  return (revenue - cost) / revenue;", "}", "=MARGIN(B2,C2)", "model → test → reuse"],
+  }),
+  cppBasics: softwareScreenImage({
+    title: "C++ editor",
+    subtitle: "Variables and input/output",
+    color: "#38bdf8",
+    code: ["#include <iostream>", "using namespace std;", "int main() {", "  int n; cin >> n;", "  cout << n * 2;", "}"],
+  }),
+  cppLoops: softwareScreenImage({
+    title: "C++ control structures",
+    subtitle: "Selection and loops",
+    color: "#38bdf8",
+    code: ["for (int i = 0; i < n; i++) {", "  if (values[i] > max) {", "    max = values[i];", "  }", "}", "cout << max;"],
+  }),
+  cppFunctions: softwareScreenImage({
+    title: "C++ functions",
+    subtitle: "Reusable program logic",
+    color: "#38bdf8",
+    code: ["double average(vector<int> values) {", "  double sum = 0;", "  for (int v : values) sum += v;", "  return sum / values.size();", "}"],
+  }),
+  webHtmlCss: softwareScreenImage({
+    title: "HTML + CSS",
+    subtitle: "Responsive web interface",
+    color: "#f472b6",
+    code: ["<section class=\"dashboard\">", "  <h1>Company data</h1>", "  <button>Open report</button>", "</section>", ".dashboard { display: grid; }"],
+  }),
+  javascript: softwareScreenImage({
+    title: "JavaScript",
+    subtitle: "Interaction and events",
+    color: "#facc15",
+    code: ["button.addEventListener('click', () => {", "  const total = calculateTotal(rows);", "  renderChart(total);", "});"],
+  }),
+  erModel: softwareScreenImage({
+    title: "E/R model",
+    subtitle: "Entities and relationships",
+    color: "#a78bfa",
+    panels: [["CUSTOMER", "id · name · email"], ["ORDER", "date · total"], ["PRODUCT", "code · price"], ["1:N", "customer places orders"]],
+  }),
+  vbSql: softwareScreenImage({
+    title: "Visual Basic + SQL",
+    subtitle: "Forms connected to data",
+    color: "#60a5fa",
+    code: ["Private Sub Save_Click()", "  cmd.CommandText = \"INSERT INTO orders ...\"", "  cmd.ExecuteNonQuery()", "End Sub", "SELECT * FROM orders WHERE status='open';"],
+  }),
+  dbAdvanced: softwareScreenImage({
+    title: "Advanced database",
+    subtitle: "Joins, keys and constraints",
+    color: "#2dd4bf",
+    code: ["SELECT c.name, SUM(o.total)", "FROM customers c", "JOIN orders o ON o.customer_id = c.id", "GROUP BY c.name", "HAVING SUM(o.total) > 1000;"],
+  }),
+  phpBackend: softwareScreenImage({
+    title: "PHP backend",
+    subtitle: "Server-side web logic",
+    color: "#818cf8",
+    code: ["<?php", "$stmt = $pdo->prepare($sql);", "$stmt->execute([$id]);", "$rows = $stmt->fetchAll();", "echo json_encode($rows);"],
+  }),
+  pythonData: softwareScreenImage({
+    title: "Python",
+    subtitle: "Automation and data handling",
+    color: "#facc15",
+    code: ["import pandas as pd", "df = pd.read_csv('sales.csv')", "report = df.groupby('area').sum()", "report.to_excel('report.xlsx')"],
+  }),
+  backendNetwork: softwareScreenImage({
+    title: "Networks + backend",
+    subtitle: "Services, APIs and security",
+    color: "#22d3ee",
+    panels: [["Client", "browser request"], ["API", "backend route"], ["Database", "persistent data"], ["Network", "security and access"]],
+  }),
+};
+
+const imageBank = {
+  office: [
+    screenBank.word,
+    screenBank.slides,
+    screenBank.spreadsheet,
+    screenBank.files,
+  ],
+  excelFlow: [
+    screenBank.excelFunctions,
+    screenBank.excelTables,
+    screenBank.customFunctions,
+    flowchartImage,
+  ],
+  pathways: [
+    "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1531498860502-7c67cf02f657?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1400&q=80",
+  ],
+  yearIII: [
+    flowchartImage,
+    screenBank.cppBasics,
+    screenBank.cppLoops,
+    screenBank.cppFunctions,
+  ],
+  yearIV: [
+    screenBank.webHtmlCss,
+    screenBank.javascript,
+    screenBank.erModel,
+    screenBank.vbSql,
+  ],
+  yearV: [
+    screenBank.dbAdvanced,
+    screenBank.phpBackend,
+    screenBank.pythonData,
+    screenBank.backendNetwork,
+  ],
+  siaAreas: [
+    "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=1400&q=80",
+  ],
+  competences: [
+    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1526378722484-bd91ca387e72?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1543286386-713bdd548da4?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1400&q=80",
+  ],
+  certificates: [
+    "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1400&q=80",
+  ],
+  projects: [
+    "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1400&q=80",
+  ],
+  erasmus: [
+    "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1504384764586-bb4cdc1707b0?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1400&q=80",
+  ],
+  ai: [
+    "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1560439514-4e9645039924?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1400&q=80",
+  ],
+  visit: [
+    "https://images.unsplash.com/photo-1551836022-4c4c79ecde51?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1487014679447-9f8336841d58?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1593720213428-28a5b9e94613?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1400&q=80",
+  ],
 };
 
 const chapters = [
   { id: "opening", label: "Opening", eyebrow: "Start", icon: Sparkles },
-  { id: "timeline", label: "Evolution", eyebrow: "1853 → Today", icon: Building2 },
-  { id: "identity", label: "Identity", eyebrow: "Current profile", icon: Landmark },
-  { id: "community", label: "Community", eyebrow: "Numbers", icon: UsersRound },
-  { id: "territory", label: "Territory", eyebrow: "Where students come from", icon: MapPin },
-  { id: "pathways", label: "Pathways", eyebrow: "Educational offer", icon: GraduationCap },
-  { id: "spaces", label: "Spaces", eyebrow: "Learning environments", icon: MonitorSmartphone },
+  { id: "first-year", label: "Year I", eyebrow: "Office suite", icon: FileText },
+  { id: "second-year", label: "Year II", eyebrow: "Advanced Excel · Flowcharts", icon: BarChart },
+  { id: "third-year", label: "Year III", eyebrow: "Flowcharts · C++", icon: Binary },
+  { id: "fourth-year", label: "Year IV", eyebrow: "Web · Databases", icon: MonitorSmartphone },
   { id: "afm", label: "AFM base", eyebrow: "Before specialization", icon: BriefcaseBusiness },
   { id: "sia", label: "SIA", eyebrow: "Specialization", icon: Database },
-  { id: "curriculum", label: "Curriculum", eyebrow: "Weekly structure", icon: BarChart },
+  { id: "curriculum", label: "Year V", eyebrow: "DB · Backend · Networks", icon: Network },
   { id: "skills", label: "Competences", eyebrow: "Learning outcomes", icon: Network },
   { id: "certifications", label: "Certifications", eyebrow: "External value", icon: BadgeCheck },
   { id: "innovation", label: "Innovation", eyebrow: "Projects", icon: Layers3 },
   { id: "erasmus", label: "Europe", eyebrow: "International mobility", icon: Globe2 },
+  { id: "ai-cyber", label: "AI & cybersafety", eyebrow: "STEM · Ethics · AI", icon: ShieldCheck },
   { id: "visit", label: "Visit", eyebrow: "Meeting path", icon: Flag },
 ];
 
-const sources = [
-  "La storia",
-  "I numeri della scuola",
-  "I luoghi",
-  "Percorsi di studio",
-  "Biennio AFM",
-  "Triennio SIA",
-  "Quadro orario SIA",
-  "ICDL - ex ECDL",
-  "EUCIP Core",
-  "Scuola digitale",
-  "PNRR Scuola 4.0",
-  "Erasmus School",
-  "Orario lezioni",
-  "Contatti istituzionali",
-];
-
-const history = [
+const firstYearProgram = [
   {
-    year: "1853",
-    title: "Foundation in Florence",
-    text: "The school was founded during the Grand Duchy of Tuscany to provide young Florentines with serious cultural preparation combined with scientific, economic and professional training.",
-    short: "Cultural, scientific, economic and professional education.",
+    title: "Word processing",
+    text: "Students learn structured documents: styles, page layout, tables, images, indexes and clear digital formatting.",
+    image: imageBank.office[0],
+    icon: FileText,
   },
   {
-    year: "1996/97",
-    title: "Merger with ITC Albert Einstein",
-    text: "The technical-commercial experience of Albert Einstein joined the Galilei tradition, strengthening the service offered to students and families.",
-    short: "Technical-commercial profile reinforced.",
-  },
-  {
-    year: "2008/09",
-    title: "Expansion of the educational offer",
-    text: "The school broadened its offer to respond more effectively to the needs of the territory, adding the socio-psycho-pedagogical pathway to the technical-commercial area.",
-    short: "A wider answer to local educational needs.",
-  },
-  {
-    year: "2010",
-    title: "Gelmini reform",
-    text: "The reform redefined the school as an Istituto Tecnico Economico and a Liceo delle Scienze Umane.",
-    short: "Technical-economic and human sciences identities.",
-  },
-  {
-    year: "2020",
-    title: "Economic-social option",
-    text: "The Liceo delle Scienze Umane was enriched with the economic-social option, adding a further bridge between society, law, economics and languages.",
-    short: "A stronger social and economic dimension.",
-  },
-  {
-    year: "Today",
-    title: "Digital ecosystem",
-    text: "The current profile combines technical education, business information systems, digital laboratories, certifications, European projects and innovation investments.",
-    short: "Tradition evolves into digital and international education.",
-  },
-];
-
-const schoolNumbers = [
-  { label: "Students", value: 978, detail: "Total students reported in the official school numbers page." },
-  { label: "Classes", value: 44, detail: "Overall classes in the institute." },
-  { label: "Liceo classes", value: 25, detail: "590 students, average 23.6 students per class." },
-  { label: "Technical classes", value: 19, detail: "381 students, average 20.05 students per class." },
-];
-
-const populationData = [
-  { area: "Liceo", students: 590, classes: 25, avg: 23.6 },
-  { area: "Technical", students: 381, classes: 19, avg: 20.05 },
-];
-
-const originData = [
-  { name: "Florence", value: 50, note: "The main share of students comes from the municipality of Florence." },
-  { name: "Scandicci", value: 20, note: "The school is directly connected to Scandicci and the south-west area of Florence." },
-  { name: "Other municipalities", value: 30, note: "Students also come from San Casciano, Signa, Lastra a Signa, Malmantile, Campi Bisenzio, Montespertoli and Cerbaia." },
-];
-
-const pathways = [
-  { title: "Biennio AFM", text: "Common two-year economic pathway before the triennium articulations.", icon: BriefcaseBusiness },
-  { title: "Triennio AFM", text: "Administration, finance and marketing specialization.", icon: Landmark },
-  { title: "Triennio SIA", text: "Business Information Systems: management, software, data and ICT procedures.", icon: Database },
-  { title: "Triennio RIM", text: "International relations for marketing.", icon: Globe2 },
-  { title: "LSU", text: "Liceo delle Scienze Umane.", icon: BookOpen },
-  { title: "LES", text: "Economic-social option of the Liceo delle Scienze Umane.", icon: Languages },
-];
-
-const spaces = [
-  {
-    title: "Interactive classrooms",
-    value: "All classrooms",
-    text: "Every classroom is equipped with an interactive multimedia whiteboard.",
-    image: officialImages.classroom,
+    title: "Presentations",
+    text: "Slides are used to communicate projects with visual hierarchy, concise text, images, charts and oral presentation logic.",
+    image: imageBank.office[1],
     icon: MonitorSmartphone,
   },
   {
-    title: "Reading room",
-    value: "Study setting",
-    text: "Used for individual study and for reading the volumes available in the library.",
-    image: null,
-    icon: BookOpen,
+    title: "Spreadsheet basics",
+    text: "Excel or equivalent spreadsheets introduce cells, formulas, references, charts and simple data organization.",
+    image: imageBank.office[2],
+    icon: BarChart,
   },
   {
-    title: "Library",
-    value: "Almost 9,000 volumes",
-    text: "Available to students and school staff.",
-    image: officialImages.library,
-    icon: Library,
+    title: "Digital file workflow",
+    text: "Students organize files, export documents, collaborate and use office tools as the first layer of digital productivity.",
+    image: imageBank.office[3],
+    icon: Database,
+  },
+];
+
+const secondYearProgram = [
+  {
+    title: "Advanced spreadsheet functions",
+    text: "Functions, nested formulas, logical tests and lookup-style operations are used to solve practical business problems.",
+    image: imageBank.excelFlow[0],
+    icon: BarChart,
   },
   {
-    title: "Language lab",
-    value: "20+ online stations",
-    text: "Designed to support language learning and certification activities.",
-    image: officialImages.languageLab,
-    icon: Languages,
+    title: "Tables and data analysis",
+    text: "Students organize datasets, filter information, summarize tables and read patterns through charts and structured ranges.",
+    image: imageBank.excelFlow[1],
+    icon: Database,
   },
   {
-    title: "ICT laboratories",
-    value: "3 labs · 60+ networked stations",
-    text: "The most relevant infrastructure for the technical and digital part of the visit.",
-    image: officialImages.lab,
+    title: "Custom functions and models",
+    text: "Spreadsheet work becomes more procedural: students design reusable calculations and small decision models.",
+    image: imageBank.excelFlow[2],
+    icon: FileText,
+  },
+  {
+    title: "Flowcharts",
+    text: "Flowcharts introduce algorithmic thinking before programming: input, process, conditions, loops and output.",
+    image: imageBank.excelFlow[3],
     icon: Binary,
   },
+];
+
+const siaYearProgram = [
   {
-    title: "Gym",
-    value: "Physical education",
-    text: "Equipped with machines for muscle strengthening and hydraulic propulsion steps.",
-    image: null,
-    icon: UsersRound,
+    year: "Year III",
+    title: "Algorithms and C++ foundations",
+    image: imageBank.yearIII[1],
+    icon: Binary,
+    modules: [
+      "Moving from Year II flowcharts to C++ source code.",
+      "Variables, basic input/output and simple expressions in C++.",
+      "Conditional structures and loops for repeated procedures.",
+      "First complete programs, then functions to organize reusable logic.",
+    ],
+    output: "Students learn to translate a problem into an algorithm and then into a working C++ program.",
   },
+  {
+    year: "Year IV",
+    title: "Web front-end and database design",
+    image: imageBank.yearIV[0],
+    icon: MonitorSmartphone,
+    modules: [
+      "HTML for structure, CSS for layout and responsive interface rules.",
+      "JavaScript for interaction, events and dynamic page behavior.",
+      "Entity/Relationship models and relational modelling before implementation.",
+      "Visual Basic, DBMS logic and SQL queries to create, read and connect business data.",
+    ],
+    output: "Students connect interface design with structured data, moving from web pages to database-backed systems.",
+  },
+  {
+    year: "Year V",
+    title: "Advanced data, backend and networks",
+    image: imageBank.yearV[0],
+    icon: Network,
+    modules: [
+      "Advanced database work: normalization, joins, constraints and reliable queries.",
+      "PHP and backend logic for business-oriented web applications.",
+      "Python for automation, data handling and practical problem solving.",
+      "Networks and backend management for company websites and services.",
+    ],
+    output: "Students read an information system as a complete chain: data, application logic, network and security.",
+  },
+];
+
+const siaTriennio = [
+  { subject: "Italian", y3: 4, y4: 4, y5: 4 },
+  { subject: "History", y3: 2, y4: 2, y5: 2 },
+  { subject: "Mathematics", y3: 3, y4: 3, y5: 3 },
+  { subject: "English", y3: 3, y4: 3, y5: 3 },
+  { subject: "Second EU language", y3: 3, y4: 0, y5: 0 },
+  { subject: "Business Economics", y3: 4, y4: 7, y5: 7 },
+  { subject: "Law", y3: 3, y4: 3, y5: 2 },
+  { subject: "Political Economics", y3: 3, y4: 2, y5: 3 },
+  { subject: "Informatics", y3: 4, y4: 5, y5: 5 },
+  { subject: "Physical Education", y3: 2, y4: 2, y5: 2 },
+  { subject: "Religion / alternative", y3: 1, y4: 1, y5: 1 },
 ];
 
 const afmBiennio = [
@@ -216,29 +458,6 @@ const afmBiennio = [
   { subject: "Science area", y1: 4, y2: 4 },
   { subject: "Physical Education", y1: 2, y2: 2 },
   { subject: "Religion / alternative", y1: 1, y2: 1 },
-];
-
-const siaTimetable = [
-  { subject: "Italian", y3: 4, y4: 4, y5: 4 },
-  { subject: "History", y3: 2, y4: 2, y5: 2 },
-  { subject: "Mathematics", y3: 3, y4: 3, y5: 3 },
-  { subject: "English", y3: 3, y4: 3, y5: 3 },
-  { subject: "Second EU language", y3: 3, y4: 0, y5: 0 },
-  { subject: "Business Economics", y3: 4, y4: 7, y5: 7 },
-  { subject: "Law", y3: 3, y4: 3, y5: 2 },
-  { subject: "Political Economics", y3: 3, y4: 2, y5: 3 },
-  { subject: "Informatics", y3: 4, y4: 5, y5: 5 },
-  { subject: "Physical Education", y3: 2, y4: 2, y5: 2 },
-  { subject: "Religion / alternative", y3: 1, y4: 1, y5: 1 },
-];
-
-const curriculumFocus = [
-  { subject: "Business Economics", y3: 4, y4: 7, y5: 7 },
-  { subject: "Informatics", y3: 4, y4: 5, y5: 5 },
-  { subject: "Law", y3: 3, y4: 3, y5: 2 },
-  { subject: "Political Economics", y3: 3, y4: 2, y5: 3 },
-  { subject: "Mathematics", y3: 3, y4: 3, y5: 3 },
-  { subject: "English", y3: 3, y4: 3, y5: 3 },
 ];
 
 const siaCompetences = [
@@ -324,75 +543,99 @@ const projects = [
   {
     title: "Metaverso Lab",
     type: "PNRR · Next Generation Labs",
-    amount: "€164,644.23",
+    focus: "future digital professions",
     text: "A lab for future digital professions, focused on the relation between physical and virtual worlds, decentralized web, sharing, attention, contribution and platform economies.",
   },
   {
     title: "Lo Spazio Tras-forma",
     type: "PNRR · Next Generation Classrooms",
-    amount: "€163,935.87",
+    focus: "active learning spaces",
     text: "A project for innovative learning environments, flexible and multifunctional classrooms, new furniture, tools and digital technologies for active teaching.",
   },
   {
     title: "Scuola digitale",
     type: "PNSD · Digital animator",
-    amount: "€2,000.00",
+    focus: "digital transition",
     text: "The digital animator supports school digitization, innovation policies, working groups and staff involvement within the National Digital School Plan.",
   },
   {
     title: "PNRR DM 65/2023",
     type: "New skills and new languages",
-    amount: "Listed among European projects",
-    text: "The official project menu connects the school development line with new competences and new languages.",
+    focus: "STEM, AI and languages",
+    text: "The project line explicitly connects STEM, artificial intelligence, foreign languages and CLIL. Student notices include podcast and artificial intelligence, educational robotics, Lego Spike, coding and 3D printing.",
   },
   {
     title: "PNRR DM 66/2023",
     type: "Digital transition training",
-    amount: "Listed among European projects",
+    focus: "staff training",
     text: "The project line is dedicated to staff training for digital transition.",
   },
 ];
 
-const erasmus = [
-  { country: "Spain", city: "Valencia", grants: 10, duration: "about 1 month" },
-  { country: "France", city: "Bordeaux", grants: 10, duration: "about 1 month" },
-  { country: "Germany", city: "Berlin", grants: 10, duration: "about 1 month" },
-  { country: "Ireland", city: "—", grants: 3, duration: "92 days" },
-  { country: "Spain", city: "—", grants: 3, duration: "92 days" },
+const aiCyberHighlights = [
+  {
+    title: "Artificial intelligence with rules",
+    tag: "Institutional governance",
+    metric: "AI regulation",
+    text: "The school document area includes a dedicated regulation for the use of Artificial Intelligence, useful to frame classroom experimentation with shared criteria.",
+    icon: FileText,
+  },
+  {
+    title: "Digital Horizons",
+    tag: "Erasmus+ dissemination",
+    metric: "Didacta 2026",
+    text: "The Digital Horizons dissemination highlights appropriate, safe and ethical implementation of digital technologies and AI, involving teachers, students and families.",
+    icon: Globe2,
+  },
+  {
+    title: "DANEEL",
+    tag: "Cyber citizenship",
+    metric: "April 2026",
+    text: "The final event, hosted at the University of Florence Novoli campus, focused on growing aware and safe citizens in cyberspace.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "STEM laboratories",
+    tag: "DM65 learning lines",
+    metric: "AI · robotics · 3D",
+    text: "The DM65 notices connect artificial intelligence, educational robotics, coding, Lego Spike, podcast work and 3D printing into practical learning paths.",
+    icon: Binary,
+  },
+  {
+    title: "Business orientation",
+    tag: "Camera di Commercio",
+    metric: "SIA/RIM class",
+    text: "Students from the articulated SIA and RIM fourth class were hosted in the auditorium through the Florence Chamber of Commerce initiative Orientarsi al Futuro.",
+    icon: BriefcaseBusiness,
+  },
+  {
+    title: "Digital services",
+    tag: "Everyday infrastructure",
+    metric: "Workspace · Office · registro",
+    text: "The official services area presents Google Workspace for Education, Office 365, the electronic register, Unica and online payment tools as part of the operational digital ecosystem.",
+    icon: MonitorSmartphone,
+  },
+];
+
+const erasmusFocus = [
+  { title: "International comparison", text: "Students and teachers can compare how digital education is organized in different school systems." },
+  { title: "Professional vocabulary", text: "SIA topics become easier to discuss abroad when students can explain databases, software and business processes in English." },
+  { title: "Digital citizenship", text: "European mobility connects technical competence with responsible online behavior and collaboration." },
+  { title: "Project culture", text: "The SIA method fits international project work: analyse, model, build, test and present." },
 ];
 
 const visitPath = [
   { step: "Welcome", text: "Institutional greeting and reason for the international meeting." },
-  { step: "Origin", text: "1853 foundation and evolution toward today’s technical-digital profile." },
-  { step: "Community", text: "Students, classes, territorial role and school structure." },
-  { step: "Spaces", text: "Classrooms, library, language lab and ICT laboratories." },
-  { step: "SIA", text: "Business information systems: curriculum, competences and professional logic." },
+  { step: "Year I", text: "Office suite: documents, presentations, spreadsheets and file workflow." },
+  { step: "Year II", text: "Advanced Excel, functions, tables, custom calculations and flowcharts." },
+  { step: "SIA identity", text: "Business information systems: curriculum, competences and professional logic." },
+  { step: "Year III", text: "C++ basics, loops, first programs and functions." },
+  { step: "Year IV", text: "HTML, CSS, JavaScript, E/R relational models, Visual Basic and SQL." },
+  { step: "Year V", text: "Advanced databases, PHP, Python, networks and backend management." },
   { step: "Certifications", text: "ICDL and EUCIP Core as external evidence of digital competence." },
-  { step: "Innovation", text: "PNRR, digital transition and European project lines." },
+  { step: "AI and cybersafety", text: "AI, robotics, coding, responsible use and cybersecurity as connected digital themes." },
   { step: "Exchange", text: "Discussion on methods, tools, curriculum design and possible collaboration." },
 ];
-
-function CountUp({ value }) {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    let frame;
-    const duration = 950;
-    const start = performance.now();
-
-    const tick = (now) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.round(value * eased));
-      if (progress < 1) frame = requestAnimationFrame(tick);
-    };
-
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [value]);
-
-  return count.toLocaleString("en-US");
-}
 
 function Glass({ children, className = "", onClick }) {
   const Element = onClick ? "button" : "div";
@@ -463,7 +706,7 @@ function Modal({ modal, close }) {
             </button>
             <div className="min-h-[320px] bg-gradient-to-br from-cyan-300/15 via-indigo-400/10 to-white/5 p-6">
               {modal.image ? (
-                <img src={modal.image} alt="" className="h-full max-h-[620px] w-full rounded-[1.4rem] object-cover opacity-90" />
+                <img src={modal.image} alt="" className="h-full max-h-[620px] w-full rounded-[1.4rem] bg-slate-950/70 object-contain opacity-95" />
               ) : (
                 <div className="grid h-full min-h-[320px] place-items-center rounded-[1.4rem] border border-white/10 bg-white/[0.04]">
                   <modal.icon className="h-24 w-24 text-cyan-200" />
@@ -557,27 +800,6 @@ function BottomChrome({ activeIndex, goTo, progress }) {
   );
 }
 
-function StatCard({ item, openModal }) {
-  return (
-    <Glass
-      onClick={() =>
-        openModal({
-          title: item.label,
-          body: item.detail,
-          icon: GraduationCap,
-        })
-      }
-      className="flex min-h-40 flex-col justify-between"
-    >
-      <p className="text-sm text-slate-400">{item.label}</p>
-      <p className="mt-4 text-6xl font-semibold tracking-tight text-white"><CountUp value={item.value} /></p>
-      <div className="mt-5 flex items-center justify-between text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">
-        Official data <ChevronRight className="h-4 w-4" />
-      </div>
-    </Glass>
-  );
-}
-
 export default function GalileiSiaInteractiveStorytelling() {
   const railRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -653,8 +875,6 @@ export default function GalileiSiaInteractiveStorytelling() {
     };
   }, [activeIndex, modal]);
 
-  const sourceSummary = useMemo(() => sources.join(" · "), []);
-
   return (
     <main className="h-screen overflow-hidden bg-[#050914] font-sans text-slate-200">
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
@@ -675,16 +895,16 @@ export default function GalileiSiaInteractiveStorytelling() {
                 Interactive visit for international ICT teachers
               </div>
               <h1 className="max-w-5xl text-6xl font-semibold leading-[0.88] tracking-[-0.065em] text-white xl:text-8xl">
-                From a historic school to a digital business systems pathway.
+                SIA: where business problems become digital systems.
               </h1>
               <p className="mt-7 max-w-3xl text-xl leading-8 text-slate-300">
-                A linear presentation of IIS Galileo Galilei focused on the evolution from institutional identity to ICT laboratories, SIA, certifications, PNRR innovation and European mobility.
+                A horizontal storyline for visiting ICT teachers: from the official SIA profile to the real three-year learning path in algorithms, C++, web development, databases, backend, Python, networks and cybersecurity.
               </p>
               <div className="mt-8 grid max-w-4xl grid-cols-4 gap-3">
-                {schoolNumbers.map((item) => (
-                  <div key={item.label} className="rounded-[1.3rem] border border-white/10 bg-white/[0.055] p-4">
-                    <p className="text-3xl font-semibold text-white">{item.value}</p>
-                    <p className="mt-1 text-xs text-slate-400">{item.label}</p>
+                {["Flowcharts", "C++", "Web + SQL", "Backend + networks"].map((item) => (
+                  <div key={item} className="rounded-[1.3rem] border border-white/10 bg-white/[0.055] p-4">
+                    <p className="text-lg font-semibold text-white">{item}</p>
+                    <p className="mt-1 text-xs text-slate-400">SIA learning layer</p>
                   </div>
                 ))}
               </div>
@@ -696,7 +916,7 @@ export default function GalileiSiaInteractiveStorytelling() {
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/10 to-transparent" />
               <div className="absolute bottom-6 left-6 right-6 rounded-[1.5rem] border border-white/10 bg-slate-950/70 p-5 backdrop-blur-xl">
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">Main narrative</p>
-                <p className="mt-2 text-2xl font-semibold text-white">History → territory → spaces → SIA → digital future</p>
+                <p className="mt-2 text-2xl font-semibold text-white">Algorithms → software → data → backend → networks</p>
               </div>
             </div>
           </Glass>
@@ -704,46 +924,48 @@ export default function GalileiSiaInteractiveStorytelling() {
 
         <ChapterShell chapter={chapters[1]} index={1} activeIndex={activeIndex} className="grid grid-cols-[0.82fr_1.18fr] items-center gap-10">
           <div>
-            <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">The school evolves through precise institutional steps.</h2>
-            <p className="mt-6 text-lg leading-8 text-slate-300">The storyline is chronological: it starts from the foundation and progressively reaches the current digital and international profile.</p>
+            <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">Year I: digital productivity with the office suite.</h2>
+            <p className="mt-6 text-lg leading-8 text-slate-300">The informatics path starts from practical tools students can immediately use: word processing, presentations, spreadsheets and file workflow. This is the base for later data and programming work.</p>
+            <div className="mt-7 overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.055]">
+              <img src={imageBank.office[0]} alt="Office suite screen" className="h-52 w-full bg-slate-950/70 object-contain opacity-95" />
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            {history.map((item, index) => (
-              <Glass
-                key={item.year}
-                onClick={() => openModal({ title: `${item.year} · ${item.title}`, body: item.text, icon: Building2 })}
-                className="min-h-[176px]"
-              >
-                <p className="text-3xl font-semibold text-cyan-200">{item.year}</p>
-                <h3 className="mt-3 text-xl font-semibold text-white">{item.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-300">{item.short}</p>
-                <div className="absolute right-4 top-4 text-slate-500">{String(index + 1).padStart(2, "0")}</div>
+            {firstYearProgram.map((item, index) => {
+              const Icon = item.icon;
+              return (
+              <Glass key={item.title} onClick={() => openModal({ title: `Year I · ${item.title}`, body: item.text, icon: Icon, image: item.image })} className="min-h-[190px]">
+                <p className="text-4xl font-semibold text-cyan-200">{index + 1}</p>
+                <Icon className="absolute right-5 top-5 h-6 w-6 text-cyan-200" />
+                <h3 className="mt-4 text-xl font-semibold text-white">{item.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-300">{item.text}</p>
               </Glass>
-            ))}
+              );
+            })}
           </div>
         </ChapterShell>
 
         <ChapterShell chapter={chapters[2]} index={2} activeIndex={activeIndex} className="grid grid-cols-[1fr_1fr] items-center gap-10">
           <div>
-            <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">Current identity: one institution, multiple educational directions.</h2>
-            <p className="mt-6 text-lg leading-8 text-slate-300">Galilei now combines an economic technical institute with human sciences pathways. The SIA focus is therefore not isolated: it is part of a broader educational ecosystem.</p>
+            <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">Year II: advanced Excel and flowcharts.</h2>
+            <p className="mt-6 text-lg leading-8 text-slate-300">The second year moves from tool use to structured problem solving: advanced spreadsheet functions, data tables, custom calculations and flowcharts as a bridge toward programming.</p>
             <div className="mt-7 rounded-[1.5rem] border border-cyan-300/20 bg-cyan-300/10 p-5">
-              <p className="text-sm uppercase tracking-[0.2em] text-cyan-200">Useful institutional data</p>
-              <p className="mt-3 text-base leading-7 text-cyan-50">Via di Scandicci 151, 50143 Firenze · Tel. 055704569 · Email fiis019002@istruzione.it · Institute code FIIS019002 · Technical code FITD019018.</p>
+              <p className="text-sm uppercase tracking-[0.2em] text-cyan-200">Bridge toward programming</p>
+              <p className="mt-3 text-base leading-7 text-cyan-50">Before C++, students learn to represent decisions and procedures visually through flowcharts.</p>
             </div>
           </div>
           <Glass className="grid grid-cols-2 gap-4 p-5">
-            {pathways.map((pathway) => {
-              const Icon = pathway.icon;
+            {secondYearProgram.map((item) => {
+              const Icon = item.icon;
               return (
                 <button
-                  key={pathway.title}
-                  onClick={() => openModal({ title: pathway.title, body: pathway.text, icon: Icon })}
+                  key={item.title}
+                  onClick={() => openModal({ title: `Year II · ${item.title}`, body: item.text, icon: Icon, image: item.image })}
                   className="rounded-[1.25rem] border border-white/10 bg-white/[0.045] p-5 text-left transition hover:-translate-y-1 hover:border-cyan-300/40 hover:bg-white/[0.085]"
                 >
                   <Icon className="h-7 w-7 text-cyan-200" />
-                  <h3 className="mt-4 text-lg font-semibold text-white">{pathway.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-300">{pathway.text}</p>
+                  <h3 className="mt-4 text-lg font-semibold text-white">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-300">{item.text}</p>
                 </button>
               );
             })}
@@ -752,121 +974,56 @@ export default function GalileiSiaInteractiveStorytelling() {
 
         <ChapterShell chapter={chapters[3]} index={3} activeIndex={activeIndex} className="grid grid-cols-[0.86fr_1.14fr] items-center gap-10">
           <div>
-            <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">A school community large enough to be read through data.</h2>
-            <p className="mt-6 text-lg leading-8 text-slate-300">The official numbers show both the scale of the institute and the relationship between liceo and technical education.</p>
+            <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">Year III: from flowcharts to C++ programs.</h2>
+            <p className="mt-6 text-lg leading-8 text-slate-300">After Year II flowcharts, students move into C++. They start from variables and basic input/output, then use selection, loops and functions to build complete programs.</p>
+            <div className="mt-7 overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.055]">
+              <img src={siaYearProgram[0].image} alt="C++ editor screen" className="h-56 w-full bg-slate-950/70 object-contain opacity-95" />
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            {schoolNumbers.map((item) => <StatCard key={item.label} item={item} openModal={openModal} />)}
-            <Glass className="col-span-2 h-[280px]">
-              <div className="mb-3 flex items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-semibold text-white">Students and classes by area</h3>
-                  <p className="text-sm text-slate-400">Liceo and technical institute comparison.</p>
-                </div>
-                <UsersRound className="h-6 w-6 text-cyan-200" />
-              </div>
-              <ResponsiveContainer width="100%" height="82%">
-                <ComposedChart data={populationData} margin={{ left: 0, right: 10, top: 15, bottom: 0 }}>
-                  <CartesianGrid stroke="rgba(255,255,255,.08)" vertical={false} />
-                  <XAxis dataKey="area" tick={{ fill: "#cbd5e1", fontSize: 12 }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fill: "#94a3b8", fontSize: 12 }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 16, color: "#fff" }} />
-                  <Bar dataKey="students" fill="#67e8f9" radius={[12, 12, 0, 0]} name="Students" />
-                  <Line dataKey="classes" stroke="#c4b5fd" strokeWidth={3} name="Classes" />
-                </ComposedChart>
-              </ResponsiveContainer>
+            {siaYearProgram[0].modules.map((item, index) => (
+              <Glass key={item} onClick={() => openModal({ title: `Year III · step ${index + 1}`, body: item, icon: Binary, image: imageBank.yearIII[index] })} className="min-h-[190px]">
+                <p className="text-4xl font-semibold text-cyan-200">{index + 1}</p>
+                <p className="mt-4 text-lg font-semibold text-white">{item}</p>
+              </Glass>
+            ))}
+            <Glass className="col-span-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200">Expected output</p>
+              <p className="mt-3 text-xl leading-8 text-white">{siaYearProgram[0].output}</p>
             </Glass>
           </div>
         </ChapterShell>
 
         <ChapterShell chapter={chapters[4]} index={4} activeIndex={activeIndex} className="grid grid-cols-[1fr_1fr] items-center gap-10">
           <div>
-            <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">The school is connected to Florence and to the metropolitan area.</h2>
-            <p className="mt-6 text-lg leading-8 text-slate-300">The catchment area is part of the story. It explains why the institute works as a territorial reference point, not only as a single-neighbourhood school.</p>
-            <div className="mt-7 grid grid-cols-2 gap-3">
-              {["San Casciano", "Signa", "Lastra a Signa", "Malmantile", "Campi Bisenzio", "Montespertoli", "Cerbaia"].map((place) => (
-                <div key={place} className="rounded-2xl border border-white/10 bg-white/[0.045] px-4 py-3 text-sm text-slate-300">{place}</div>
-              ))}
-            </div>
+            <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">Year IV: web interfaces meet relational data.</h2>
+            <p className="mt-6 text-lg leading-8 text-slate-300">The second SIA year gives students the web stack and then connects it to data modelling: HTML, CSS and JavaScript become the front-end face of systems described with E/R models and implemented through DBMS and SQL.</p>
+            <Glass className="mt-7">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200">Bridge concept</p>
+              <p className="mt-3 text-2xl font-semibold text-white">User interface → data model → database query</p>
+            </Glass>
           </div>
-          <Glass className="h-[520px]">
-            <div className="mb-5 flex items-center justify-between">
-              <div>
-                <h3 className="text-2xl font-semibold text-white">Student origin</h3>
-                <p className="text-sm text-slate-400">Official territorial distribution.</p>
+          <Glass className="h-[560px] p-0">
+            <img src={siaYearProgram[1].image} alt="Web development screen" className="h-44 w-full bg-slate-950/70 object-contain opacity-95" />
+            <div className="grid grid-cols-2 gap-3 p-4">
+              {siaYearProgram[1].modules.map((item, index) => (
+                <button
+                  key={item}
+                  onClick={() => openModal({ title: `Year IV · ${index < 2 ? "web" : "database"}`, body: item, icon: index < 2 ? MonitorSmartphone : Database, image: imageBank.yearIV[index] })}
+                  className="min-h-[112px] rounded-[1.25rem] border border-white/10 bg-white/[0.045] p-4 text-left transition hover:-translate-y-1 hover:border-cyan-300/40 hover:bg-white/[0.085]"
+                >
+                  <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-200">{index < 2 ? "Front-end" : "Data"}</p>
+                  <p className="mt-3 text-base font-semibold leading-6 text-white">{item}</p>
+                </button>
+              ))}
+              <div className="col-span-2 rounded-[1.25rem] border border-cyan-300/20 bg-cyan-300/10 p-3">
+                <p className="text-sm leading-5 text-cyan-50">{siaYearProgram[1].output}</p>
               </div>
-              <MapPin className="h-7 w-7 text-cyan-200" />
             </div>
-            <ResponsiveContainer width="100%" height="78%">
-              <BarChart data={originData} layout="vertical" margin={{ left: 22, right: 42, top: 20, bottom: 8 }}>
-                <CartesianGrid stroke="rgba(255,255,255,.08)" horizontal={false} />
-                <XAxis type="number" domain={[0, 60]} hide />
-                <YAxis dataKey="name" type="category" width={150} tick={{ fill: "#cbd5e1", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 16, color: "#fff" }} />
-                <Bar dataKey="value" fill="#67e8f9" radius={[0, 16, 16, 0]}>
-                  <LabelList dataKey="value" position="right" formatter={(v) => `${v}%`} fill="#e2e8f0" />
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
           </Glass>
         </ChapterShell>
 
-        <ChapterShell chapter={chapters[5]} index={5} activeIndex={activeIndex} className="grid grid-cols-[0.85fr_1.15fr] items-center gap-10">
-          <div>
-            <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">The educational offer creates the bridge toward SIA.</h2>
-            <p className="mt-6 text-lg leading-8 text-slate-300">The official study paths show the technical-economic sequence: a common AFM biennium followed by AFM, SIA or RIM specializations. This is the structural context for the SIA presentation.</p>
-          </div>
-          <div className="grid grid-cols-3 gap-4">
-            {pathways.map((pathway, index) => {
-              const Icon = pathway.icon;
-              return (
-                <Glass key={pathway.title} onClick={() => openModal({ title: pathway.title, body: pathway.text, icon: Icon })} className={`${index === 2 ? "ring-2 ring-cyan-300/40" : ""} min-h-[190px]`}>
-                  <Icon className="h-8 w-8 text-cyan-200" />
-                  <h3 className="mt-5 text-xl font-semibold text-white">{pathway.title}</h3>
-                  <p className="mt-3 text-sm leading-6 text-slate-300">{pathway.text}</p>
-                </Glass>
-              );
-            })}
-          </div>
-        </ChapterShell>
-
-        <ChapterShell chapter={chapters[6]} index={6} activeIndex={activeIndex} className="grid grid-cols-[0.78fr_1.22fr] items-center gap-10">
-          <div>
-            <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">Learning spaces make the digital dimension visible.</h2>
-            <p className="mt-6 text-lg leading-8 text-slate-300">Instead of repeating the same photographs, the spaces are presented as an infrastructure map. Images are used only when they add evidence.</p>
-          </div>
-          <div className="grid grid-cols-3 gap-4">
-            {spaces.map((space) => {
-              const Icon = space.icon;
-              return (
-                <Glass
-                  key={space.title}
-                  onClick={() => openModal({ title: `${space.title} · ${space.value}`, body: space.text, image: space.image, icon: Icon })}
-                  className={`${space.image ? "min-h-[250px] p-0" : "min-h-[250px]"}`}
-                >
-                  {space.image ? (
-                    <>
-                      <img src={space.image} alt={space.title} className="h-[250px] w-full object-cover opacity-80" />
-                      <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/10 bg-slate-950/72 p-4 backdrop-blur-xl">
-                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">{space.value}</p>
-                        <h3 className="mt-1 text-lg font-semibold text-white">{space.title}</h3>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <Icon className="h-8 w-8 text-cyan-200" />
-                      <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">{space.value}</p>
-                      <h3 className="mt-2 text-xl font-semibold text-white">{space.title}</h3>
-                      <p className="mt-3 text-sm leading-6 text-slate-300">{space.text}</p>
-                    </>
-                  )}
-                </Glass>
-              );
-            })}
-          </div>
-        </ChapterShell>
-
-        <ChapterShell chapter={chapters[7]} index={7} activeIndex={activeIndex} className="grid grid-cols-[0.86fr_1.14fr] items-center gap-10">
+        <ChapterShell chapter={chapters[5]} index={5} activeIndex={activeIndex} className="grid grid-cols-[0.86fr_1.14fr] items-center gap-10">
           <div>
             <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">Before SIA: a common economic and digital foundation.</h2>
             <p className="mt-6 text-lg leading-8 text-slate-300">The technical-economic pathway begins with a common two-year AFM structure. Informatics is already present in the first two years, together with business economics, mathematics, law, languages and science.</p>
@@ -883,7 +1040,7 @@ export default function GalileiSiaInteractiveStorytelling() {
                 <CartesianGrid stroke="rgba(255,255,255,.08)" vertical={false} />
                 <XAxis dataKey="subject" angle={-35} textAnchor="end" height={72} tick={{ fill: "#cbd5e1", fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: "#94a3b8", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 16, color: "#fff" }} />
+                <Tooltip cursor={{ fill: "rgba(15, 23, 42, 0.45)" }} contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 16, color: "#fff" }} />
                 <Bar dataKey="y1" name="Year I" fill="#67e8f9" radius={[8, 8, 0, 0]} />
                 <Bar dataKey="y2" name="Year II" fill="#a5b4fc" radius={[8, 8, 0, 0]} />
               </BarChart>
@@ -891,77 +1048,59 @@ export default function GalileiSiaInteractiveStorytelling() {
           </Glass>
         </ChapterShell>
 
-        <ChapterShell chapter={chapters[8]} index={8} activeIndex={activeIndex} className="grid grid-cols-[0.9fr_1.1fr] items-center gap-10">
+        <ChapterShell chapter={chapters[6]} index={6} activeIndex={activeIndex} className="grid grid-cols-[0.9fr_1.1fr] items-center gap-10">
           <div>
             <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">SIA is the point where company organization becomes an information system.</h2>
             <p className="mt-6 text-lg leading-8 text-slate-300">The official SIA profile focuses on the management of business information systems and on the evaluation, choice and adaptation of application software.</p>
             <div className="mt-7 grid grid-cols-2 gap-3">
               {siaSystemAreas.map((area) => (
-                <Glass key={area.label} onClick={() => openModal({ title: area.label, body: area.text, icon: Database })} className="min-h-[116px]">
+                <Glass key={area.label} onClick={() => openModal({ title: area.label, body: area.text, icon: Database, image: imageBank.siaAreas[siaSystemAreas.findIndex((item) => item.label === area.label)] })} className="min-h-[116px]">
                   <p className="text-sm font-semibold text-white">{area.label}</p>
                   <p className="mt-2 text-sm leading-6 text-slate-400">{area.text}</p>
                 </Glass>
               ))}
             </div>
           </div>
-          <Glass className="h-[620px]">
-            <div className="grid h-full grid-rows-[auto_1fr] gap-5">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">Core logic</p>
-                <h3 className="mt-2 text-3xl font-semibold text-white">Business process → data → software → network → security</h3>
-              </div>
-              <div className="grid grid-cols-1 gap-3">
-                {[
-                  ["Company needs", "Economic, organizational and management problems are identified."],
-                  ["Information flow", "Data are collected, stored, interpreted and represented."],
-                  ["Software solution", "Applications and procedures are evaluated and adapted."],
-                  ["Network communication", "Information moves through connected systems and services."],
-                  ["Cybersecurity", "The system must remain reliable, organized and protected."],
-                ].map(([title, text], index) => (
-                  <div key={title} className="grid grid-cols-[3rem_1fr] items-center gap-4 rounded-[1.35rem] border border-white/10 bg-white/[0.045] p-4">
-                    <div className="grid h-12 w-12 place-items-center rounded-2xl bg-cyan-300 text-lg font-semibold text-slate-950">{index + 1}</div>
-                    <div>
-                      <h4 className="font-semibold text-white">{title}</h4>
-                      <p className="mt-1 text-sm leading-6 text-slate-300">{text}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Glass>
-        </ChapterShell>
-
-        <ChapterShell chapter={chapters[9]} index={9} activeIndex={activeIndex} className="grid grid-cols-[0.82fr_1.18fr] items-center gap-10">
-          <div>
-            <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">The weekly timetable confirms the identity of SIA.</h2>
-            <p className="mt-6 text-lg leading-8 text-slate-300">The SIA triennium has 32 weekly hours every year. The most characterizing subjects are Business Economics and Informatics.</p>
-            <div className="mt-7 grid grid-cols-3 gap-3">
-              {["Year III", "Year IV", "Year V"].map((year) => (
-                <div key={year} className="rounded-[1.3rem] border border-white/10 bg-white/[0.055] p-4">
-                  <p className="text-4xl font-semibold text-white">32</p>
-                  <p className="mt-1 text-sm text-slate-400">hours · {year}</p>
-                </div>
-              ))}
-            </div>
-          </div>
           <Glass className="h-[600px]">
-            <h3 className="text-2xl font-semibold text-white">SIA triennium · key subjects</h3>
-            <p className="mt-1 text-sm text-slate-400">Weekly hours in year III, IV and V.</p>
+            <h3 className="text-2xl font-semibold text-white">SIA triennium timetable</h3>
+            <p className="mt-1 text-sm text-slate-400">Same structure as the previous chart, focused on years III, IV and V.</p>
             <ResponsiveContainer width="100%" height="88%">
-              <BarChart data={curriculumFocus} margin={{ left: -10, right: 10, top: 22, bottom: 26 }}>
+              <BarChart data={siaTriennio} margin={{ top: 22, right: 10, left: -15, bottom: 58 }}>
                 <CartesianGrid stroke="rgba(255,255,255,.08)" vertical={false} />
-                <XAxis dataKey="subject" tick={{ fill: "#cbd5e1", fontSize: 11 }} axisLine={false} tickLine={false} />
+                <XAxis dataKey="subject" angle={-35} textAnchor="end" height={76} tick={{ fill: "#cbd5e1", fontSize: 10 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: "#94a3b8", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 16, color: "#fff" }} />
+                <Tooltip cursor={{ fill: "rgba(15, 23, 42, 0.45)" }} contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 16, color: "#fff" }} />
                 <Bar dataKey="y3" name="Year III" fill="#67e8f9" radius={[8, 8, 0, 0]} />
                 <Bar dataKey="y4" name="Year IV" fill="#818cf8" radius={[8, 8, 0, 0]} />
-                <Bar dataKey="y5" name="Year V" fill="#c4b5fd" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="y5" name="Year V" fill="#f0abfc" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </Glass>
         </ChapterShell>
 
-        <ChapterShell chapter={chapters[10]} index={10} activeIndex={activeIndex} className="grid grid-cols-[0.78fr_1.22fr] items-center gap-10">
+        <ChapterShell chapter={chapters[7]} index={7} activeIndex={activeIndex} className="grid grid-cols-[0.82fr_1.18fr] items-center gap-10">
+          <div>
+            <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">Year V: the full business information system.</h2>
+            <p className="mt-6 text-lg leading-8 text-slate-300">After Year III algorithms and Year IV web/database foundations, the final SIA year treats the company website as an information system: reliable data, server-side logic, Python, networks and backend management.</p>
+            <div className="mt-7 overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.055]">
+              <img src={siaYearProgram[2].image} alt="Advanced database screen" className="h-56 w-full bg-slate-950/70 object-contain opacity-95" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            {siaYearProgram[2].modules.map((item, index) => (
+              <Glass key={item} onClick={() => openModal({ title: `Year V · module ${index + 1}`, body: item, icon: index === 3 ? Network : Database, image: imageBank.yearV[index] })} className="min-h-[185px]">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">{["Data", "PHP", "Python", "Networks"][index]}</p>
+                <p className="mt-4 text-lg font-semibold leading-7 text-white">{item}</p>
+              </Glass>
+            ))}
+            <Glass className="col-span-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200">Expected output</p>
+              <p className="mt-3 text-xl leading-8 text-white">{siaYearProgram[2].output}</p>
+            </Glass>
+          </div>
+        </ChapterShell>
+
+        <ChapterShell chapter={chapters[8]} index={8} activeIndex={activeIndex} className="grid grid-cols-[0.78fr_1.22fr] items-center gap-10">
           <div>
             <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">The learning outcomes are practical, technical and organizational.</h2>
             <p className="mt-6 text-lg leading-8 text-slate-300">This scene translates the official SIA profile into a competence map, useful for guests who need to understand what students are expected to know and do.</p>
@@ -970,7 +1109,7 @@ export default function GalileiSiaInteractiveStorytelling() {
             {siaCompetences.map((competence) => {
               const Icon = competence.icon;
               return (
-                <Glass key={competence.title} onClick={() => openModal({ title: competence.title, body: competence.text, icon: Icon })} className="min-h-[190px]">
+                <Glass key={competence.title} onClick={() => openModal({ title: competence.title, body: competence.text, icon: Icon, image: imageBank.competences[siaCompetences.findIndex((item) => item.title === competence.title)] })} className="min-h-[190px]">
                   <Icon className="h-7 w-7 text-cyan-200" />
                   <h3 className="mt-4 text-lg font-semibold text-white">{competence.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-slate-300">{competence.text}</p>
@@ -980,7 +1119,7 @@ export default function GalileiSiaInteractiveStorytelling() {
           </div>
         </ChapterShell>
 
-        <ChapterShell chapter={chapters[11]} index={11} activeIndex={activeIndex} className="grid grid-cols-[0.82fr_1.18fr] items-center gap-10">
+        <ChapterShell chapter={chapters[9]} index={9} activeIndex={activeIndex} className="grid grid-cols-[0.82fr_1.18fr] items-center gap-10">
           <div>
             <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">Certifications give external evidence to digital competence.</h2>
             <p className="mt-6 text-lg leading-8 text-slate-300">ICDL and EUCIP Core make the digital profile more readable for international guests because they use recognized, transferable frameworks.</p>
@@ -989,7 +1128,7 @@ export default function GalileiSiaInteractiveStorytelling() {
             {certifications.map((cert) => {
               const Icon = cert.icon;
               return (
-                <Glass key={cert.title} onClick={() => openModal({ title: `${cert.title} · ${cert.subtitle}`, body: cert.points, icon: Icon, extra: cert.metrics.join(" · ") })} className="min-h-[520px]">
+                <Glass key={cert.title} onClick={() => openModal({ title: `${cert.title} · ${cert.subtitle}`, body: cert.points, icon: Icon, extra: cert.metrics.join(" · "), image: imageBank.certificates[certifications.findIndex((item) => item.title === cert.title)] })} className="min-h-[520px]">
                   <Icon className="h-10 w-10 text-cyan-200" />
                   <p className="mt-6 text-sm font-semibold uppercase tracking-[0.22em] text-cyan-200">{cert.title}</p>
                   <h3 className="mt-3 text-3xl font-semibold text-white">{cert.subtitle}</h3>
@@ -1007,79 +1146,106 @@ export default function GalileiSiaInteractiveStorytelling() {
           </div>
         </ChapterShell>
 
-        <ChapterShell chapter={chapters[12]} index={12} activeIndex={activeIndex} className="grid grid-cols-[0.78fr_1.22fr] items-center gap-10">
+        <ChapterShell chapter={chapters[10]} index={10} activeIndex={activeIndex} className="grid grid-cols-[0.78fr_1.22fr] items-center gap-10">
           <div>
-            <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">Innovation is presented as a system of projects.</h2>
-            <p className="mt-6 text-lg leading-8 text-slate-300">The official project pages connect the school to digital transition, PNRR investments, new classrooms, future digital professions and staff training.</p>
+            <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">Innovation supports the SIA mindset.</h2>
+            <p className="mt-6 text-lg leading-8 text-slate-300">The project layer is useful only when it helps explain what happens in SIA: active laboratories, digital transition, STEM, artificial intelligence, coding and robotics.</p>
             <Glass className="mt-7">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-200">Total highlighted PNRR 4.0 funding</p>
-              <p className="mt-3 text-5xl font-semibold text-white">€328,580.10</p>
-              <p className="mt-2 text-sm text-slate-400">Metaverso Lab + Lo Spazio Tras-forma.</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-200">No financial figures shown</p>
+              <p className="mt-3 text-2xl font-semibold text-white">The visitor sees educational value, not budgets.</p>
+              <p className="mt-2 text-sm text-slate-400">Sensitive or administrative details are intentionally excluded.</p>
             </Glass>
           </div>
           <div className="grid grid-cols-2 gap-4">
             {projects.map((project, index) => (
-              <Glass key={project.title} onClick={() => openModal({ title: project.title, body: project.text, icon: Layers3, extra: `${project.type} · ${project.amount}` })} className={index === 0 ? "min-h-[230px] ring-2 ring-cyan-300/30" : "min-h-[230px]"}>
+              <Glass key={project.title} onClick={() => openModal({ title: project.title, body: project.text, icon: Layers3, extra: `${project.type} · ${project.focus}`, image: imageBank.projects[index] })} className={index === 0 ? "min-h-[230px] ring-2 ring-cyan-300/30" : "min-h-[230px]"}>
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200">{project.type}</p>
                 <h3 className="mt-3 text-2xl font-semibold text-white">{project.title}</h3>
-                <p className="mt-2 text-xl font-semibold text-indigo-100">{project.amount}</p>
+                <p className="mt-2 text-xl font-semibold text-indigo-100">{project.focus}</p>
                 <p className="mt-3 text-sm leading-6 text-slate-300">{project.text}</p>
               </Glass>
             ))}
           </div>
         </ChapterShell>
 
-        <ChapterShell chapter={chapters[13]} index={13} activeIndex={activeIndex} className="grid grid-cols-[0.82fr_1.18fr] items-center gap-10">
+        <ChapterShell chapter={chapters[11]} index={11} activeIndex={activeIndex} className="grid grid-cols-[0.82fr_1.18fr] items-center gap-10">
           <div>
             <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">European mobility expands the meaning of technical education.</h2>
-            <p className="mt-6 text-lg leading-8 text-slate-300">The Erasmus School page presents participation in Erasmus+ KA121 VET with opportunities for training abroad and links with a consortium coordinated by Centro Machiavelli in Florence.</p>
+            <p className="mt-6 text-lg leading-8 text-slate-300">For visiting teachers, the European layer is best used as a conversation bridge: how students explain algorithms, databases, web apps and digital responsibility across languages and school systems.</p>
             <div className="mt-7 rounded-[1.5rem] border border-cyan-300/20 bg-cyan-300/10 p-5">
-              <p className="text-base leading-7 text-cyan-50">The 2025 information includes 30 places for Spain, France and Germany, plus a VET Long call with 6 places for recent graduates.</p>
+              <p className="text-base leading-7 text-cyan-50">No mobility counts or administrative details are shown. The focus stays on educational exchange and ICT teaching practice.</p>
             </div>
           </div>
-          <Glass className="h-[560px]">
-            <h3 className="text-2xl font-semibold text-white">Erasmus+ VET opportunities</h3>
-            <p className="mt-1 text-sm text-slate-400">Destinations and available grants listed in the official pages.</p>
-            <ResponsiveContainer width="100%" height="86%">
-              <AreaChart data={erasmus} margin={{ top: 28, right: 20, left: -10, bottom: 20 }}>
-                <defs>
-                  <linearGradient id="grants" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#67e8f9" stopOpacity={0.75} />
-                    <stop offset="95%" stopColor="#67e8f9" stopOpacity={0.05} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid stroke="rgba(255,255,255,.08)" vertical={false} />
-                <XAxis dataKey="country" tick={{ fill: "#cbd5e1", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: "#94a3b8", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 16, color: "#fff" }} />
-                <Area type="monotone" dataKey="grants" stroke="#67e8f9" fill="url(#grants)" strokeWidth={3} name="Grants" />
-              </AreaChart>
-            </ResponsiveContainer>
-          </Glass>
+          <div className="grid grid-cols-2 gap-4">
+            <Glass className="col-span-2 h-[240px] p-0">
+              <img src={officialImages.languageLab} alt="Language laboratory" className="h-full w-full object-cover opacity-80" />
+              <div className="absolute inset-x-5 bottom-5 rounded-[1.4rem] border border-white/10 bg-slate-950/72 p-4 backdrop-blur-xl">
+                <h3 className="text-2xl font-semibold text-white">Language lab as a bridge for ICT exchange</h3>
+              </div>
+            </Glass>
+            {erasmusFocus.map((item) => (
+              <Glass key={item.title} onClick={() => openModal({ title: item.title, body: item.text, icon: Globe2, image: imageBank.erasmus[erasmusFocus.findIndex((focus) => focus.title === item.title)] })} className="min-h-[150px]">
+                <h3 className="text-lg font-semibold text-white">{item.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-slate-300">{item.text}</p>
+              </Glass>
+            ))}
+          </div>
         </ChapterShell>
 
-        <ChapterShell chapter={chapters[14]} index={14} activeIndex={activeIndex} className="grid grid-cols-[0.82fr_1.18fr] items-center gap-10">
+        <ChapterShell chapter={chapters[12]} index={12} activeIndex={activeIndex} className="grid grid-cols-[0.78fr_1.22fr] items-center gap-10">
+          <div>
+            <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">AI is treated as a cultural, technical and civic question.</h2>
+            <p className="mt-6 text-lg leading-8 text-slate-300">For ICT teachers, this is the strongest “current” layer of the visit: the school links AI, robotics, cybersecurity, digital citizenship and business orientation instead of presenting technology as isolated tools.</p>
+            <div className="mt-7 grid grid-cols-2 gap-3">
+              {[
+                ["STEM line", "new skills and languages"],
+                ["Named learning areas", "AI · robotics · coding · 3D"],
+                ["Ethical axis", "safe and responsible digital use"],
+                ["Business bridge", "SIA/RIM and local enterprise culture"],
+              ].map(([label, value]) => (
+                <div key={label} className="rounded-[1.3rem] border border-white/10 bg-white/[0.055] p-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">{label}</p>
+                  <p className="mt-2 text-2xl font-semibold text-white">{value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            {aiCyberHighlights.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Glass key={item.title} onClick={() => openModal({ title: item.title, body: item.text, icon: Icon, extra: `${item.tag} · ${item.metric}`, image: imageBank.ai[aiCyberHighlights.findIndex((highlight) => highlight.title === item.title)] })} className="min-h-[245px]">
+                  <Icon className="h-8 w-8 text-cyan-200" />
+                  <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">{item.tag}</p>
+                  <h3 className="mt-2 text-xl font-semibold text-white">{item.title}</h3>
+                  <p className="mt-2 text-sm font-semibold text-indigo-100">{item.metric}</p>
+                  <p className="mt-3 text-sm leading-6 text-slate-300">{item.text}</p>
+                </Glass>
+              );
+            })}
+          </div>
+        </ChapterShell>
+
+        <ChapterShell chapter={chapters[13]} index={13} activeIndex={activeIndex} className="grid grid-cols-[0.82fr_1.18fr] items-center gap-10">
           <div>
             <h2 className="text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-white xl:text-7xl">A proposed route for the meeting.</h2>
             <p className="mt-6 text-lg leading-8 text-slate-300">The presentation closes by transforming the website into a practical sequence for the actual visit with foreign ICT teachers.</p>
             <div className="mt-7 rounded-[1.5rem] border border-white/10 bg-white/[0.055] p-5">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200">Source base</p>
-              <p className="mt-3 text-sm leading-7 text-slate-300">{sourceSummary}</p>
+              <p className="mt-3 text-sm leading-6 text-slate-300">Official school pages on SIA, study paths, learning spaces, certifications, digital school, AI and Erasmus.</p>
             </div>
           </div>
-          <Glass className="h-[640px] overflow-y-auto pr-3">
-            <div className="space-y-3">
+          <Glass className="p-4">
+            <div className="grid grid-cols-3 gap-3">
               {visitPath.map((item, index) => (
                 <button
                   key={item.step}
-                  onClick={() => openModal({ title: item.step, body: item.text, icon: Flag })}
-                  className="grid w-full grid-cols-[3.5rem_1fr] items-center gap-4 rounded-[1.35rem] border border-white/10 bg-white/[0.045] p-4 text-left transition hover:-translate-y-1 hover:border-cyan-300/40 hover:bg-white/[0.085]"
+                  onClick={() => openModal({ title: item.step, body: item.text, icon: Flag, image: imageBank.visit[index] })}
+                  className="min-h-[145px] rounded-[1.25rem] border border-white/10 bg-white/[0.045] p-4 text-left transition hover:-translate-y-1 hover:border-cyan-300/40 hover:bg-white/[0.085]"
                 >
-                  <div className="grid h-12 w-12 place-items-center rounded-2xl bg-white text-lg font-semibold text-slate-950">{index + 1}</div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-white">{item.step}</h3>
-                    <p className="mt-1 text-sm leading-6 text-slate-300">{item.text}</p>
-                  </div>
+                  <div className="grid h-10 w-10 place-items-center rounded-2xl bg-white text-base font-semibold text-slate-950">{index + 1}</div>
+                  <h3 className="mt-3 text-base font-semibold text-white">{item.step}</h3>
+                  <p className="mt-2 text-xs leading-5 text-slate-300">{item.text}</p>
                 </button>
               ))}
             </div>
